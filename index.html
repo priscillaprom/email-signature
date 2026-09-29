@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prometheus Signature Generator</title>
+<style>
+  body { margin:0; font-family: Arial, Helvetica, sans-serif; background:#f6f4f2; color:#111; }
+  .wrap { max-width:640px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p.sub { margin:0 0 20px; color:#666; font-size:14px; }
+  .card { background:#fff; border:1px solid #e3ded9; border-radius:10px; padding:16px; margin-bottom:16px; }
+  label { display:block; font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#70584A; margin:12px 0 4px; }
+  label:first-child { margin-top:0; }
+  input { width:100%; box-sizing:border-box; padding:10px; font-size:15px; border:1px solid #cfc8c1; border-radius:6px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; }
+  button { padding:10px 16px; font-size:15px; border-radius:6px; border:0; cursor:pointer; background:#70584A; color:#fff; }
+  button.alt { background:#fff; color:#70584A; border:1px solid #70584A; }
+  #status { font-size:13px; color:#2a7a3b; margin-top:10px; min-height:18px; }
+  #sig { background:#fff; overflow-x:auto; }
+  ol { font-size:14px; line-height:1.6; padding-left:20px; margin:0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Prometheus Signature Generator</h1>
+  <p class="sub">Fill in the details, check the preview, then copy it into Outlook.</p>
+
+  <div class="card">
+    <label for="name">Full name</label>
+    <input id="name" value="Your Name">
+    <label for="title">Job title</label>
+    <input id="title" value="Your Title">
+    <label for="phone">Phone</label>
+    <input id="phone" value="(555) 555-5555">
+    <label for="email">Email</label>
+    <input id="email" value="name@prometheusrising.com">
+  </div>
+
+  <div class="card">
+    <div id="sig"></div>
+  </div>
+
+  <div class="btns">
+    <button id="copy">Copy signature</button>
+    <button id="dl" class="alt">Download as .html</button>
+  </div>
+  <div id="status"></div>
+
+  <div class="card" style="margin-top:16px;">
+    <ol>
+      <li>Click <b>Copy signature</b>.</li>
+      <li>In Outlook go to Settings &gt; Signatures and create a new signature.</li>
+      <li>Paste it into the editor and save.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+var BASE = "https://priscillaprom.github.io/email-signature/";
+
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function row(icon, alt, href, text){
+  if(!text) return "";
+  var link = '<a href="'+esc(href)+'" style="color:#111111 !important; text-decoration:underline !important;"><span style="color:#111111 !important; text-decoration:underline !important;">'+esc(text)+'</span></a>';
+  return '<tr>'+
+    '<td width="22" valign="middle" style="width:22px; padding:0 7px 4px 0;"><img src="'+BASE+icon+'" width="13" height="13" alt="'+alt+'" border="0" style="display:block; width:13px; height:13px; margin:0; padding:0; border:0; font-size:11px; color:#111111;"></td>'+
+    '<td valign="middle" style="padding:0 0 4px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; color:#111111;">'+link+'</td>'+
+  '</tr>';
+}
+
+function buildSig(d){
+  var digits = d.phone.replace(/\D/g,"");
+  var tel = digits.length === 10 ? "+1"+digits : "+"+digits;
+  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding:14px 16px;">'+
+  '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="430" style="width:430px; max-width:430px; border-collapse:collapse; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr>'+
+  '<td width="255" valign="middle" style="width:255px; padding:8px 16px 8px 0; font-family:Arial, Helvetica, sans-serif; vertical-align:middle;">'+
+    '<div style="margin:0; padding:0 0 5px 0; font-family:Arial, Helvetica, sans-serif; font-size:18px; line-height:22px; font-weight:700; color:#111111;">'+esc(d.name)+'</div>'+
+    '<div style="margin:0; padding:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; font-weight:400; color:#111111; letter-spacing:3px; word-spacing:3px; white-space:nowrap;">'+esc(d.title)+'</div>'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td width="30" height="1" bgcolor="#222222" style="width:30px; height:1px; background-color:#222222; padding:0; font-size:1px; line-height:1px;">&nbsp;</td></tr></table>'+
+    '<div style="height:11px; line-height:11px; font-size:1px;">&nbsp;</div>'+
+    '<div style="margin:0; padding:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:18px; font-weight:700; color:#70584A; white-space:nowrap;">Prometheus Rising Studios</div>'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; border-spacing:0; font-family:Arial, Helvetica, sans-serif; mso-table-lspace:0pt; mso-table-rspace:0pt;">'+
+      row("icon-phone.png","Phone","tel:"+tel,d.phone)+
+      row("icon-web.png","Website","https://prometheusrising.com/","prometheusrising.com")+
+      row("icon-email.png","Email","mailto:"+d.email,d.email)+
+    '</table>'+
+  '</td>'+
+  '<td width="12" style="width:12px; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
+  '<td width="1" height="145" bgcolor="#222222" style="width:1px; height:145px; background-color:#222222; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
+  '<td width="16" style="width:16px; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
+  '<td width="125" valign="middle" align="center" style="width:125px; padding:0; vertical-align:middle; text-align:center;"><img src="'+BASE+'prometheus-flame.png" width="120" alt="Prometheus Rising Studios" border="0" style="display:block; width:120px; height:auto; margin:0 auto; padding:0; border:0; outline:none; text-decoration:none; font-size:12px; color:#70584A;"></td>'+
+  '</tr></table></td></tr></table>';
+}
+
+function data(){
+  return {
+    name: document.getElementById("name").value.trim(),
+    title: document.getElementById("title").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim()
+  };
+}
+
+function render(){ document.getElementById("sig").innerHTML = buildSig(data()); }
+
+["name","title","phone","email"].forEach(function(id){
+  document.getElementById(id).addEventListener("input", render);
+});
+
+function say(msg){ document.getElementById("status").textContent = msg; }
+
+document.getElementById("copy").addEventListener("click", function(){
+  var el = document.getElementById("sig");
+  var range = document.createRange();
+  range.selectNodeContents(el);
+  var sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  var ok = false;
+  try { ok = document.execCommand("copy"); } catch(e) {}
+  sel.removeAllRanges();
+  say(ok ? "Copied. Now paste it into your Outlook signature." : "Copy didn't work. Select the signature manually and copy it.");
+});
+
+document.getElementById("dl").addEventListener("click", function(){
+  var d = data();
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Signature</title></head><body style="margin:0; padding:0;">'+buildSig(d)+'</body></html>';
+  var blob = new Blob([html], {type:"text/html"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "signature-" + (d.name.split(" ")[0] || "new").toLowerCase() + ".html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  say("Downloaded.");
+});
+
+render();
+</script>
+</body>
+</html>

@@ -65,34 +65,40 @@ function esc(s){
 
 function row(icon, alt, href, text){
   if(!text) return "";
-  var link = '<a href="'+esc(href)+'" style="color:#111111 !important; text-decoration:underline !important;"><span style="color:#111111 !important; text-decoration:underline !important;">'+esc(text)+'</span></a>';
+  var link = '<a href="'+esc(href)+'" style="color:#70584A !important; text-decoration:none !important;"><span style="color:#70584A !important; text-decoration:none !important;">'+esc(text)+'</span></a>';
   return '<tr>'+
     '<td width="22" valign="middle" style="width:22px; padding:0 7px 4px 0;"><img src="'+BASE+icon+'" width="13" height="13" alt="'+alt+'" border="0" style="display:block; width:13px; height:13px; margin:0; padding:0; border:0; font-size:11px; color:#111111;"></td>'+
     '<td valign="middle" style="padding:0 0 4px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:16px; color:#111111;">'+link+'</td>'+
   '</tr>';
 }
 
+function fmtPhone(p){
+  var x = p.replace(/\D/g,"");
+  if(x.length === 11 && x.charAt(0) === "1") x = x.slice(1);
+  return x.length === 10 ? "("+x.slice(0,3)+") "+x.slice(3,6)+"-"+x.slice(6) : p;
+}
+
 function buildSig(d){
   var digits = d.phone.replace(/\D/g,"");
   var tel = digits.length === 10 ? "+1"+digits : "+"+digits;
   return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding:14px 16px;">'+
-  '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="430" style="width:430px; max-width:430px; border-collapse:collapse; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr>'+
-  '<td width="255" valign="middle" style="width:255px; padding:8px 16px 8px 0; font-family:Arial, Helvetica, sans-serif; vertical-align:middle;">'+
+  '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="385" style="width:385px; max-width:385px; border-collapse:collapse; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr>'+
+  '<td width="250" valign="middle" style="width:250px; padding:8px 16px 8px 0; font-family:Arial, Helvetica, sans-serif; vertical-align:middle;">'+
     '<div style="margin:0; padding:0 0 5px 0; font-family:Arial, Helvetica, sans-serif; font-size:18px; line-height:22px; font-weight:700; color:#111111;">'+esc(d.name)+'</div>'+
-    '<div style="margin:0; padding:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; font-weight:400; color:#111111; letter-spacing:3px; word-spacing:3px; white-space:nowrap;">'+esc(d.title)+'</div>'+
-    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td width="30" height="1" bgcolor="#222222" style="width:30px; height:1px; background-color:#222222; padding:0; font-size:1px; line-height:1px;">&nbsp;</td></tr></table>'+
+    '<div style="margin:0; padding:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:18px; font-weight:400; color:#555555; letter-spacing:1px; word-spacing:1px;">'+esc(d.title)+'</div>'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td width="30" height="1" bgcolor="#B8A597" style="width:30px; height:1px; background-color:#B8A597; padding:0; font-size:1px; line-height:1px;">&nbsp;</td></tr></table>'+
     '<div style="height:11px; line-height:11px; font-size:1px;">&nbsp;</div>'+
     '<div style="margin:0; padding:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:18px; font-weight:700; color:#70584A; white-space:nowrap;">Prometheus Rising Studios</div>'+
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; border-spacing:0; font-family:Arial, Helvetica, sans-serif; mso-table-lspace:0pt; mso-table-rspace:0pt;">'+
-      row("icon-phone.png","Phone","tel:"+tel,d.phone)+
+      row("icon-phone.png","Phone","tel:"+tel,fmtPhone(d.phone))+
       row("icon-web.png","Website","https://prometheusrising.com/","prometheusrising.com")+
       row("icon-email.png","Email","mailto:"+d.email,d.email)+
     '</table>'+
   '</td>'+
   '<td width="12" style="width:12px; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
-  '<td width="1" height="145" bgcolor="#222222" style="width:1px; height:145px; background-color:#222222; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
+  '<td width="1" height="150" bgcolor="#D9CCC2" style="width:1px; height:150px; background-color:#D9CCC2; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
   '<td width="16" style="width:16px; padding:0; font-size:1px; line-height:1px;">&nbsp;</td>'+
-  '<td width="125" valign="middle" align="center" style="width:125px; padding:0; vertical-align:middle; text-align:center;"><a href="https://prometheusrising.com/" style="text-decoration:none; border:0;"><img src="'+BASE+'prometheus-flamee.png" width="120" alt="Prometheus Rising Studios" border="0" style="display:block; width:120px; height:auto; margin:0 auto; padding:0; border:0; outline:none; text-decoration:none; font-size:12px; color:#70584A;"></a></td>'+
+  '<td width="90" valign="middle" align="center" style="width:90px; padding:0; vertical-align:middle; text-align:center;"><a href="https://prometheusrising.com/" style="text-decoration:none; border:0;"><img src="'+BASE+'prometheus-flamee.png" height="150" alt="Prometheus Rising Studios" border="0" style="display:block; height:150px; width:auto; margin:0 auto; padding:0; border:0; outline:none; text-decoration:none; font-size:12px; color:#70584A;"></a></td>'+
   '</tr></table></td></tr></table>';
 }
 
